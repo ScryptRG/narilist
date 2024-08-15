@@ -1,76 +1,141 @@
+<edit-item
+  *ngIf="showEdit"
+  [items]="items"
+  (showEditChange)="onShowEditCard($event)"
+  [selectedItem]="selectedItem"
+></edit-item>
 <main
-  class="flex flex-col justify-center items-center gap-4 min-h-screen bg-[#FFFCF7] font-['Rubik']"
+  class="flex flex-col justify-center items-center min-h-screen bg-secondary font-['Rubik']"
 >
-  <h1 class="text-xl">Julho</h1>
-  <section
-    class="flex flex-col border border-primary w-[30rem] rounded-lg max-h-[70vh] overflow-y-auto"
-  >
-    @for (item of items; track $index) {
+  <section class="flex flex-col gap-3 items-center">
+    <h1 class="text-2xl font-bold text-primary self-start ml-2">Julho</h1>
     <div
-      class="flex justify-evenly gap-8 text-lg py-3 border-b border-primary w-full"
+      class="flex flex-col border border-primary w-[40vw] rounded-lg h-[70vh] overflow-y-auto"
     >
-      <p class="font-semibold w-[10rem] text-center">{{ item.date }}</p>
-      <p class="w-[10rem] text-center">{{ item.price }}</p>
-      <p class="w-[10rem] text-center">{{ item.payment }}</p>
+      @for (item of items; track $index) {
+      <div
+        class="flex justify-between gap-8 text-lg py-3 border-b border-primary w-full text-primary px-4 group hover:bg-primary hover:bg-opacity-5"
+      >
+        <p class="font-semibold text-center animate__bounceIn">
+          {{ item.date }}
+        </p>
+        <p class="text-center flex-1 animate__bounceIn">
+          R$ {{ item.price }},00
+        </p>
+        <p class="text-center flex-1 animate__bounceIn">{{ item.payment }}</p>
+        <button
+          class="invisible group-hover:visible"
+          (click)="showEditCard(item.id)"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1.5em"
+            height="1.5em"
+            viewBox="0 0 24 24"
+            fill="#6a512c"
+          >
+            <path
+              d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352z"
+            />
+            <path
+              d="M19.846 4.318a2.2 2.2 0 0 0-.437-.692a2 2 0 0 0-.654-.463a1.92 1.92 0 0 0-1.544 0a2 2 0 0 0-.654.463l-.546.578l2.852 3.02l.546-.579a2.1 2.1 0 0 0 .437-.692a2.24 2.24 0 0 0 0-1.635M17.45 8.721L14.597 5.7L9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.5.5 0 0 0 .255-.145l4.778-5.06Z"
+            />
+          </svg>
+        </button>
+      </div>
+      }
     </div>
-    }
+    <div class="flex items-center">
+      <div class="flex flex-row-reverse items-center">
+        <div>
+          <span class="!text-primary mr-2">R$</span>
+          <input
+            type="number"
+            [value]="priceValue"
+            [(ngModel)]="priceValue"
+            class="p-2 border border-primary text-primary bg-transparent max-w-16 placeholder:text-[#6A512C60]"
+            max="5000"
+            autofocus
+            placeholder="Preço"
+          />
+          <button
+            class="p-2 border border-primary bg-primary text-white"
+            (click)="addItem()"
+          >
+            Adicionar
+          </button>
+        </div>
+        <div class="relative flex items-center gap-6 mr-6">
+          <input
+            type="radio"
+            name="payment-method"
+            id="pix"
+            value="Pix"
+            [(ngModel)]="paymentMethod"
+          />
+          <input
+            type="radio"
+            name="payment-method"
+            id="cash"
+            value="Dinheiro"
+            [(ngModel)]="paymentMethod"
+          />
+          <input
+            type="radio"
+            name="payment-method"
+            id="card"
+            value="card"
+            [(ngModel)]="paymentMethod"
+          />
+          <label for="pix" id="label-pix" title="Pix">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="2em"
+              height="2em"
+              viewBox="0 0 512 512"
+            >
+              <path
+                fill="#6A512C60"
+                d="M242.4 292.5c5.4-5.4 14.7-5.4 20.1 0l77 77c14.2 14.2 33.1 22 53.1 22h15.1l-97.1 97.1c-30.3 29.5-79.5 29.5-109.8 0l-97.5-97.4h9.3c20 0 38.9-7.8 53.1-22zm20.1-73.6c-6.4 5.5-14.6 5.6-20.1 0l-76.7-76.7c-14.2-15.1-33.1-22-53.1-22h-9.3l97.4-97.44c30.4-30.346 79.6-30.346 109.9 0l97.2 97.14h-15.2c-20 0-38.9 7.8-53.1 22zm-149.9-76.2c13.8 0 26.5 5.6 37.1 15.4l76.7 76.7c7.2 6.3 16.6 10.8 26.1 10.8c9.4 0 18.8-4.5 26-10.8l77-77c9.8-9.7 23.3-15.3 37.1-15.3h37.7l58.3 58.3c30.3 30.3 30.3 79.5 0 109.8l-58.3 58.3h-37.7c-13.8 0-27.3-5.6-37.1-15.4l-77-77c-13.9-13.9-38.2-13.9-52.1.1l-76.7 76.6c-10.6 9.8-23.3 15.4-37.1 15.4H80.78l-58.02-58c-30.346-30.3-30.346-79.5 0-109.8l58.02-58.1z"
+              />
+            </svg>
+          </label>
+          <label for="cash" id="label-cash" title="Dinheiro">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="2.3em"
+              height="2.3em"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill="#6A512C60"
+                d="M1 4.25C1 3.56 1.56 3 2.25 3h9.5c.69 0 1.25.56 1.25 1.25v5.5c0 .69-.56 1.25-1.25 1.25h-9.5C1.56 11 1 10.44 1 9.75zm3 .25V4H3v.5a.5.5 0 0 1-.5.5H2v1h.5A1.5 1.5 0 0 0 4 4.5M9 7a2 2 0 1 0-4 0a2 2 0 0 0 4 0m2-3h-1v.5A1.5 1.5 0 0 0 11.5 6h.5V5h-.5a.5.5 0 0 1-.5-.5zM4 9.5A1.5 1.5 0 0 0 2.5 8H2v1h.5a.5.5 0 0 1 .5.5v.5h1zm7 .5v-.5a.5.5 0 0 1 .5-.5h.5V8h-.5A1.5 1.5 0 0 0 10 9.5v.5zm-6.5 3a1.5 1.5 0 0 1-1.427-1.036Q3.281 12 3.5 12h8.25A2.25 2.25 0 0 0 14 9.75V5.085A1.5 1.5 0 0 1 15 6.5v3.25A3.25 3.25 0 0 1 11.75 13z"
+              />
+            </svg>
+          </label>
+          <label for="card" id="label-card" title="Cartão">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="2em"
+              height="2em"
+              viewBox="0 0 512 512"
+            >
+              <path
+                fill="#6A512C60"
+                d="M32 376a56 56 0 0 0 56 56h336a56 56 0 0 0 56-56V222H32Zm66-76a30 30 0 0 1 30-30h48a30 30 0 0 1 30 30v20a30 30 0 0 1-30 30h-48a30 30 0 0 1-30-30ZM424 80H88a56 56 0 0 0-56 56v26h448v-26a56 56 0 0 0-56-56"
+              />
+            </svg>
+          </label>
+          <select
+            class="bg-primary text-white payment-select"
+            *ngIf="['Débito', 'Crédito', 'card'].includes(paymentMethod)"
+            [(ngModel)]="cardType"
+          >
+            <option value="Débito" selected>Débito</option>
+            <option value="Crédito">Crédito</option>
+          </select>
+        </div>
+      </div>
+    </div>
   </section>
-  <div class="flex items-center">
-    <input
-      type="text"
-      [value]="priceValue"
-      [(ngModel)]="priceValue"
-      (input)="mask()"
-      class="p-2 border border-primary bg-transparent"
-      size="10"
-    />
-    <button
-      class="p-2 border border-primary bg-primary text-white"
-      (click)="addItem(priceValue)"
-    >
-      Adicionar
-    </button>
-    <input type="radio" name="payment-method" id="pix" />
-    <input type="radio" name="payment-method" id="cash" />
-    <input type="radio" name="payment-method" id="card" />
-    <label for="pix" id="label-pix">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="2em"
-        height="2em"
-        viewBox="0 0 512 512"
-      >
-        <path
-          fill="#b8b8b8"
-          d="M242.4 292.5c5.4-5.4 14.7-5.4 20.1 0l77 77c14.2 14.2 33.1 22 53.1 22h15.1l-97.1 97.1c-30.3 29.5-79.5 29.5-109.8 0l-97.5-97.4h9.3c20 0 38.9-7.8 53.1-22zm20.1-73.6c-6.4 5.5-14.6 5.6-20.1 0l-76.7-76.7c-14.2-15.1-33.1-22-53.1-22h-9.3l97.4-97.44c30.4-30.346 79.6-30.346 109.9 0l97.2 97.14h-15.2c-20 0-38.9 7.8-53.1 22zm-149.9-76.2c13.8 0 26.5 5.6 37.1 15.4l76.7 76.7c7.2 6.3 16.6 10.8 26.1 10.8c9.4 0 18.8-4.5 26-10.8l77-77c9.8-9.7 23.3-15.3 37.1-15.3h37.7l58.3 58.3c30.3 30.3 30.3 79.5 0 109.8l-58.3 58.3h-37.7c-13.8 0-27.3-5.6-37.1-15.4l-77-77c-13.9-13.9-38.2-13.9-52.1.1l-76.7 76.6c-10.6 9.8-23.3 15.4-37.1 15.4H80.78l-58.02-58c-30.346-30.3-30.346-79.5 0-109.8l58.02-58.1z"
-        />
-      </svg>
-    </label>
-    <label for="cash" id="label-cash">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="2em"
-        height="2em"
-        viewBox="0 0 16 16"
-      >
-        <path
-          fill="#b8b8b8"
-          d="M1 4.25C1 3.56 1.56 3 2.25 3h9.5c.69 0 1.25.56 1.25 1.25v5.5c0 .69-.56 1.25-1.25 1.25h-9.5C1.56 11 1 10.44 1 9.75zm3 .25V4H3v.5a.5.5 0 0 1-.5.5H2v1h.5A1.5 1.5 0 0 0 4 4.5M9 7a2 2 0 1 0-4 0a2 2 0 0 0 4 0m2-3h-1v.5A1.5 1.5 0 0 0 11.5 6h.5V5h-.5a.5.5 0 0 1-.5-.5zM4 9.5A1.5 1.5 0 0 0 2.5 8H2v1h.5a.5.5 0 0 1 .5.5v.5h1zm7 .5v-.5a.5.5 0 0 1 .5-.5h.5V8h-.5A1.5 1.5 0 0 0 10 9.5v.5zm-6.5 3a1.5 1.5 0 0 1-1.427-1.036Q3.281 12 3.5 12h8.25A2.25 2.25 0 0 0 14 9.75V5.085A1.5 1.5 0 0 1 15 6.5v3.25A3.25 3.25 0 0 1 11.75 13z"
-        />
-      </svg>
-    </label>
-    <label for="card" id="label-card">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="2em"
-        height="2em"
-        viewBox="0 0 512 512"
-      >
-        <path
-          fill="#b8b8b8"
-          d="M32 376a56 56 0 0 0 56 56h336a56 56 0 0 0 56-56V222H32Zm66-76a30 30 0 0 1 30-30h48a30 30 0 0 1 30 30v20a30 30 0 0 1-30 30h-48a30 30 0 0 1-30-30ZM424 80H88a56 56 0 0 0-56 56v26h448v-26a56 56 0 0 0-56-56"
-        />
-      </svg>
-    </label>
-  </div>
 </main>

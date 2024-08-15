@@ -1,18 +1,43 @@
 label {
   cursor: pointer;
-  margin: 0 10px;
 }
 
-#pix:checked ~ #label-pix path {
-  fill: #000;
-}
-#card:checked ~ #label-card path {
-  fill: #000;
-}
+#pix:checked ~ #label-pix path,
+#card:checked ~ #label-card path,
 #cash:checked ~ #label-cash path {
-  fill: #000;
+  fill: #6a512c;
+  transition: all 200ms ease;
+  width: 150px !important;
 }
 
 input[type="radio"] {
   display: none;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+::-webkit-scrollbar {
+  width: 0.4em;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #6a512c;
+  border-radius: 1em;
+}
+
+select {
+  margin-left: -10px;
+  animation: select 250ms ease forwards;
+}
+
+@keyframes select {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 80px;
+  }
 }

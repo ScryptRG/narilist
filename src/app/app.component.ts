@@ -1,55 +1,70 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { RouterOutlet } from "@angular/router";
+import { FormsModule } from "@angular/forms";
+import { default as dayjs } from "dayjs";
+import { EditItemComponent } from "./edit-item/edit-item.component";
+dayjs().format();
 interface ItemsInterface {
   id: number;
   date: string;
-  price: string;
+  price: number;
   payment: string;
 }
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, FormsModule],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  imports: [CommonModule, RouterOutlet, FormsModule, EditItemComponent],
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"],
 })
 export class AppComponent {
-  title = 'naribrecho';
-  priceValue = '';
+  priceValue: number = 0;
+  paymentMethod: string = "";
+  cardType: string = "Débito";
+  showEdit: boolean = false;
+  selectedItem: number = 0;
+
   items: ItemsInterface[] = [
     {
-      id: 1,
-      date: '14/08/24',
-      price: '14',
-      payment: 'Pix',
-    },
-    {
-      id: 2,
-      date: '14/08/24',
-      price: '13',
-      payment: 'Dinheiro',
-    },
-    {
-      id: 3,
-      date: '14/08/24',
-      price: '140',
-      payment: 'Crédito',
+      id: 1723768019,
+      date: "15/08/2024 - 15:32",
+      price: 80,
+      payment: "Pix",
     },
   ];
 
-  addItem(price: any) {
-    this.items.push({ id: 2, date: '14/08/24', price: price, payment: 'Pix' });
-    this.priceValue = '';
-  }
-  mask() {
-    function preco(preco: string) {
-      preco = preco.replace(/\D/g, '');
-      preco = (Number(preco) / 100).toFixed(2).replace('.', ',');
-      return preco;
+  addItem() {
+    if (
+      this.paymentMethod != "" &&
+      this.priceValue != 0 &&
+      this.priceValue != null
+    ) {
+      this.items.push({
+        id: dayjs().valueOf(),
+        date: dayjs().format("DD/MM/YYYY - HH:mm"),
+        price: this.priceValue,
+        payment:
+          this.paymentMethod === "" || this.paymentMethod === "card"
+            ? this.cardType
+            : this.paymentMethod,
+      });
     }
-    this.priceValue = 'R$ ' + preco(this.priceValue);
+    if (this.priceValue === 0 || this.priceValue === null) {
+      alert("Adicione um preço");
+    } else if (this.paymentMethod === "") {
+      alert("Adicione um método de pagamento");
+    } else {
+      this.priceValue = 0;
+    }
+  }
+
+  showEditCard(id: number) {
+    this.showEdit = true;
+    this.selectedItem = id;
+  }
+
+  onShowEditCard(value: boolean) {
+    this.showEdit = value;
   }
 }
