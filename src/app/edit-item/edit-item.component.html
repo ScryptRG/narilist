@@ -1,35 +1,48 @@
 <section
-  class="fixed inset-0 flex justify-center items-center w-full min-h-screen bg-black bg-opacity-20"
+  class="fixed inset-0 flex justify-center items-center w-full min-h-screen bg-black bg-opacity-30 z-10"
+  (click)="close()"
 >
-  <div class="relative bg-secondary p-20">
-    <button class="absolute top-2 right-2" (click)="close()">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="2em"
-        height="2em"
-        viewBox="0 0 24 24"
-      >
-        <path
-          fill="black"
-          d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"
-        />
-      </svg>
-    </button>
+  <div
+    class="relative flex flex-wrap justify-center gap-x-16 gap-y-6 items-center animate__animated animate__zoomIn border border-primary bg-secondary px-10 py-5 rounded-lg mx-5"
+    (click)="SP($event)"
+  >
+    <input
+      type="datetime-local"
+      [(ngModel)]="newDate"
+      class="bg-primary text-white p-2"
+    />
     <div>
+      <span class="text-primary mr-2">R$</span>
       <input
         type="number"
         [value]="newPrice"
         [(ngModel)]="newPrice"
-        class="p-2 border border-primary text-primary bg-transparent max-w-24 placeholder:text-[#6A512C60]"
-        max="5000"
+        class="p-2 border border-primary text-primary bg-transparent max-w-16 placeholder:text-[#6A512C60]"
         autofocus
         placeholder="Preço"
       />
+    </div>
+    <select
+      class="bg-primary text-white payment-select p-2 cursor-pointer"
+      [(ngModel)]="newPayment"
+    >
+      <option value="Pix">Pix</option>
+      <option value="Dinheiro">Dinheiro</option>
+      <option value="Débito">Débito</option>
+      <option value="Crédito">Crédito</option>
+    </select>
+    <div>
       <button
-        class="p-2 border border-primary bg-primary text-white"
+        class="py-1 px-3 border border-primary bg-primary text-white"
         (click)="updateItem()"
       >
-        Editar
+        Salvar
+      </button>
+      <button
+        class="py-1 px-3 border border-primary bg-secondary text-primary"
+        (click)="close()"
+      >
+        Cancelar
       </button>
     </div>
   </div>

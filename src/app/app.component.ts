@@ -2,14 +2,20 @@ import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterOutlet } from "@angular/router";
 import { FormsModule } from "@angular/forms";
-import { default as dayjs } from "dayjs";
 import { EditItemComponent } from "./edit-item/edit-item.component";
+import { default as dayjs } from "dayjs";
 dayjs().format();
 interface ItemsInterface {
   id: number;
+  dateId: number;
   date: string;
   price: number;
   payment: string;
+}
+
+interface MonthInterface {
+  julho: ItemsInterface[];
+  agosto: ItemsInterface[];
 }
 @Component({
   selector: "app-root",
@@ -21,18 +27,27 @@ interface ItemsInterface {
 export class AppComponent {
   priceValue: number = 0;
   paymentMethod: string = "";
+  selectedMonth: keyof MonthInterface = "julho";
   cardType: string = "Débito";
   showEdit: boolean = false;
-  selectedItem: number = 0;
+  selectedItem: number = 1;
 
-  items: ItemsInterface[] = [
-    {
-      id: 1723768019,
-      date: "15/08/2024 - 15:32",
-      price: 80,
-      payment: "Pix",
-    },
-  ];
+  items: MonthInterface = {
+    julho: [],
+    agosto: [
+      {
+        id: 21,
+        dateId: 1785623411,
+        date: dayjs(1664874010125).format("DD/MM/YYYY"),
+        price: 50,
+        payment: "Débito",
+      },
+    ],
+  };
+
+  ngOnInit(): void {
+    this.items = JSON.parse(localStorage.getItem("data") || "");
+  }
 
   addItem() {
     if (
@@ -40,8 +55,9 @@ export class AppComponent {
       this.priceValue != 0 &&
       this.priceValue != null
     ) {
-      this.items.push({
+      this.items.julho.push({
         id: dayjs().valueOf(),
+        dateId: dayjs().valueOf(),
         date: dayjs().format("DD/MM/YYYY - HH:mm"),
         price: this.priceValue,
         payment:
@@ -57,6 +73,8 @@ export class AppComponent {
     } else {
       this.priceValue = 0;
     }
+
+    localStorage.setItem("data", JSON.stringify(this.items));
   }
 
   showEditCard(id: number) {
@@ -66,5 +84,9 @@ export class AppComponent {
 
   onShowEditCard(value: boolean) {
     this.showEdit = value;
+  }
+
+  formatDate(date: any) {
+    dayjs(date).format("DD/MM/YYYY - HH:mm");
   }
 }
