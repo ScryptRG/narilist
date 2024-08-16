@@ -5,28 +5,33 @@
   [selectedItem]="selectedItem"
 ></edit-item>
 <main
-  class="flex flex-col justify-center items-center min-h-screen bg-secondary font-['Rubik']"
+  class="flex flex-col justify-center items-center min-h-screen bg-secondary font-['Rubik'] w-full"
 >
   <section class="flex flex-col gap-2 items-center">
-    <div class="flex gap-2 self-start font-bold text-primary">
-      <button
-        (click)="this.selectedMonth = 'julho'"
-        class="border border-primary px-4 py-1 rounded"
-        [ngClass]="{
-          '!bg-primary !text-white': this.selectedMonth === 'julho'
-        }"
-      >
-        JULHO
-      </button>
-      <button
-        (click)="this.selectedMonth = 'agosto'"
-        class="border border-primary px-4 py-1 rounded"
-        [ngClass]="{
-          '!bg-primary !text-white': this.selectedMonth === 'agosto'
-        }"
-      >
-        AGOSTO
-      </button>
+    <div class="flex justify-between w-full">
+      <div class="flex gap-2 self-start font-bold text-primary">
+        <button
+          (click)="changeMonth('julho')"
+          class="border border-primary px-4 py-1 rounded"
+          [ngClass]="{
+            '!bg-primary !text-white': this.selectedMonth === 'julho'
+          }"
+        >
+          JULHO
+        </button>
+        <button
+          (click)="changeMonth('agosto')"
+          class="border border-primary px-4 py-1 rounded"
+          [ngClass]="{
+            '!bg-primary !text-white': this.selectedMonth === 'agosto'
+          }"
+        >
+          AGOSTO
+        </button>
+      </div>
+      <span class="text-primary text-xl font-normal justify-self-end">
+        Venda total no mês: R$ {{ total }}
+      </span>
     </div>
     <div
       class="flex flex-col border border-primary w-[40vw] rounded-lg h-[70vh] overflow-y-auto"

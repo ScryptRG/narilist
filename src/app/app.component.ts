@@ -31,22 +31,22 @@ export class AppComponent {
   cardType: string = "Débito";
   showEdit: boolean = false;
   selectedItem: number = 1;
+  total: number = 0;
 
   items: MonthInterface = {
     julho: [],
-    agosto: [
-      {
-        id: 21,
-        dateId: 1785623411,
-        date: dayjs(1664874010125).format("DD/MM/YYYY"),
-        price: 50,
-        payment: "Débito",
-      },
-    ],
+    agosto: [],
   };
+
+  setTotalPrice(month: keyof MonthInterface) {
+    this.total = this.items[month].reduce((acc, cur) => {
+      return acc + cur.price;
+    }, 0);
+  }
 
   ngOnInit(): void {
     this.items = JSON.parse(localStorage.getItem("data") || "");
+    this.setTotalPrice(this.selectedMonth);
   }
 
   addItem() {
@@ -55,7 +55,7 @@ export class AppComponent {
       this.priceValue != 0 &&
       this.priceValue != null
     ) {
-      this.items.julho.push({
+      this.items[this.selectedMonth].push({
         id: dayjs().valueOf(),
         dateId: dayjs().valueOf(),
         date: dayjs().format("DD/MM/YYYY - HH:mm"),
@@ -65,6 +65,7 @@ export class AppComponent {
             ? this.cardType
             : this.paymentMethod,
       });
+      this.setTotalPrice(this.selectedMonth);
     }
     if (this.priceValue === 0 || this.priceValue === null) {
       alert("Adicione um preço");
@@ -86,7 +87,12 @@ export class AppComponent {
     this.showEdit = value;
   }
 
-  formatDate(date: any) {
+  formatDate(date: Date) {
     dayjs(date).format("DD/MM/YYYY - HH:mm");
+  }
+
+  changeMonth(month: keyof MonthInterface) {
+    this.selectedMonth = month;
+    this.setTotalPrice(month);
   }
 }
