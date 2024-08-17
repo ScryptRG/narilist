@@ -29,22 +29,24 @@ export class EditItemComponent {
   newPayment = "";
   newDate = "";
   @Input() items!: MonthInterface;
-  @Input() selectedItem!: number;
-  @Output() showEditChange = new EventEmitter<boolean>();
+  @Input() itemId!: number;
+  @Input() selectedMonth!: keyof MonthInterface;
+  @Output() showEditCard = new EventEmitter<boolean>();
+  @Output() setMonthSelling = new EventEmitter<boolean>();
+  selectedItem!: ItemsInterface;
 
   ngOnInit() {
-    const itemIndex: number = this.items.julho.findIndex(
-      (e) => e.id === this.selectedItem
-    );
-    this.newPrice = this.items.julho[itemIndex].price;
-    this.newPayment = this.items.julho[itemIndex].payment;
-    this.newDate = dayjs(this.items.julho[itemIndex].dateId).format(
-      "YYYY-MM-DDTHH:mm"
-    );
+    this.selectedItem =
+      this.items[this.selectedMonth][
+        this.items[this.selectedMonth].findIndex((e) => e.id === this.itemId)
+      ];
+    this.newPrice = this.selectedItem.price;
+    this.newPayment = this.selectedItem.payment;
+    this.newDate = dayjs(this.selectedItem.dateId).format("YYYY-MM-DDTHH:mm");
   }
 
   close() {
-    this.showEditChange.emit(false);
+    this.showEditCard.emit(false);
   }
 
   SP(e: Event) {
@@ -52,17 +54,24 @@ export class EditItemComponent {
   }
 
   updateItem() {
-    const itemIndex: number = this.items.julho.findIndex(
-      (e) => e.id === this.selectedItem
-    );
-    this.items.julho[itemIndex].price = this.newPrice;
-    this.items.julho[itemIndex].payment = this.newPayment;
-    this.items.julho[itemIndex].date = dayjs(this.newDate).format(
-      "DD/MM/YYYY - HH:mm"
-    );
-    this.items.julho[itemIndex].dateId = dayjs(this.newDate).valueOf();
-
+    this.selectedItem.price = this.newPrice;
+    this.selectedItem.payment = this.newPayment;
+    this.selectedItem.date = dayjs(this.newDate).format("DD/MM/YYYY - HH:mm");
+    this.selectedItem.dateId = dayjs(this.newDate).valueOf();
+    this.setMonthSelling.emit();
     localStorage.setItem("data", JSON.stringify(this.items));
     this.close();
+  }
+
+  deleteItem() {
+    const qst = confirm("Tem certeza que deseja remover essa venda?");
+    if (qst) {
+      this.items[this.selectedMonth] = this.items[this.selectedMonth].filter(
+        (e) => e.id != this.itemId
+      );
+      this.setMonthSelling.emit();
+      localStorage.setItem("data", JSON.stringify(this.items));
+      this.close();
+    }
   }
 }

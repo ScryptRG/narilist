@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterOutlet } from "@angular/router";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, NgForm } from "@angular/forms";
 import { EditItemComponent } from "./edit-item/edit-item.component";
 import { default as dayjs } from "dayjs";
 dayjs().format();
@@ -30,26 +30,26 @@ export class AppComponent {
   selectedMonth: keyof MonthInterface = "julho";
   cardType: string = "Débito";
   showEdit: boolean = false;
-  selectedItem: number = 1;
-  total: number = 0;
+  itemId: number = 1;
+  monthSelling: number = 0;
 
   items: MonthInterface = {
     julho: [],
     agosto: [],
   };
 
-  setTotalPrice(month: keyof MonthInterface) {
-    this.total = this.items[month].reduce((acc, cur) => {
+  setMonthSelling(month: keyof MonthInterface) {
+    this.monthSelling = this.items[month].reduce((acc, cur) => {
       return acc + cur.price;
     }, 0);
   }
 
   ngOnInit(): void {
     this.items = JSON.parse(localStorage.getItem("data") || "");
-    this.setTotalPrice(this.selectedMonth);
+    this.setMonthSelling(this.selectedMonth);
   }
 
-  addItem() {
+  addItem(form: NgForm) {
     if (
       this.paymentMethod != "" &&
       this.priceValue != 0 &&
@@ -65,7 +65,7 @@ export class AppComponent {
             ? this.cardType
             : this.paymentMethod,
       });
-      this.setTotalPrice(this.selectedMonth);
+      this.setMonthSelling(this.selectedMonth);
     }
     if (this.priceValue === 0 || this.priceValue === null) {
       alert("Adicione um preço");
@@ -80,7 +80,7 @@ export class AppComponent {
 
   showEditCard(id: number) {
     this.showEdit = true;
-    this.selectedItem = id;
+    this.itemId = id;
   }
 
   onShowEditCard(value: boolean) {
@@ -93,6 +93,6 @@ export class AppComponent {
 
   changeMonth(month: keyof MonthInterface) {
     this.selectedMonth = month;
-    this.setTotalPrice(month);
+    this.setMonthSelling(month);
   }
 }
