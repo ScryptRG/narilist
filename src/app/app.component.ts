@@ -37,11 +37,12 @@ interface MonthInterface {
 export class AppComponent {
   priceValue: number = 0;
   paymentMethod: string = "";
-  selectedMonth: keyof MonthInterface = "julho";
+  selectedMonth!: keyof MonthInterface;
   cardType: string = "Débito";
   showEdit: boolean = false;
   itemId: number = 1;
   monthSelling: number = 0;
+  monthBox: boolean = false;
 
   items: MonthInterface = {
     janeiro: [],
@@ -58,7 +59,9 @@ export class AppComponent {
     dezembro: [],
   };
 
-  monthKeys: any = Object.keys(this.items);
+  monthKeys: (keyof MonthInterface)[] = Object.keys(
+    this.items
+  ) as (keyof MonthInterface)[];
 
   setMonthSelling(month: keyof MonthInterface) {
     this.monthSelling = this.items[month].reduce((acc, cur) => {
@@ -67,49 +70,11 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
+    this.selectedMonth = Object.keys(this.items)[
+      dayjs().get("month")
+    ] as keyof MonthInterface;
     this.items = JSON.parse(localStorage.getItem("data") || "");
     this.setMonthSelling(this.selectedMonth);
-  }
-
-  getMonth(date: Date) {
-    switch (dayjs(date).get("month")) {
-      case 0:
-        this.selectedMonth = "janeiro";
-        break;
-      case 1:
-        this.selectedMonth = "fevereiro";
-        break;
-      case 2:
-        this.selectedMonth = "marco";
-        break;
-      case 3:
-        this.selectedMonth = "abril";
-        break;
-      case 4:
-        this.selectedMonth = "maio";
-        break;
-      case 5:
-        this.selectedMonth = "junho";
-        break;
-      case 6:
-        this.selectedMonth = "julho";
-        break;
-      case 7:
-        this.selectedMonth = "agosto";
-        break;
-      case 8:
-        this.selectedMonth = "setembro";
-        break;
-      case 9:
-        this.selectedMonth = "outubro";
-        break;
-      case 10:
-        this.selectedMonth = "novembro";
-        break;
-      default:
-        this.selectedMonth = "dezembro";
-        break;
-    }
   }
 
   addItem() {
@@ -118,7 +83,9 @@ export class AppComponent {
       this.priceValue != 0 &&
       this.priceValue != null
     ) {
-      this.getMonth(new Date());
+      if (this.selectedMonth === this.monthKeys[dayjs().get("month")]) {
+        this.selectedMonth = this.monthKeys[dayjs().get("month")];
+      }
       this.items[this.selectedMonth].push({
         id: dayjs().valueOf(),
         dateId: dayjs().valueOf(),
@@ -157,6 +124,11 @@ export class AppComponent {
 
   changeMonth(month: keyof MonthInterface) {
     this.selectedMonth = month;
+    this.showMonthBox();
     this.setMonthSelling(month);
+  }
+
+  showMonthBox() {
+    this.monthBox = !this.monthBox;
   }
 }

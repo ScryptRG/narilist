@@ -7,21 +7,42 @@
   (setMonthSelling)="setMonthSelling(selectedMonth)"
 ></edit-item>
 <main
-  class="flex flex-col justify-center items-center min-h-screen bg-secondary font-['Rubik'] w-full sm:px-12"
+  class="flex flex-col justify-center items-center min-h-screen bg-secondary font-['Rubik'] py-2 w-full sm:px-12"
 >
   <section class="flex flex-col gap-2 items-center max-w-[50rem] w-full">
     <div
-      class="flex justify-between items-center w-full gap-y-2 max-[450px]:flex-col max-[450px]:justify-center"
+      class="relative flex justify-end items-center w-full max-[450px]:flex-col max-[450px]:justify-center"
     >
-      <div class="flex gap-2 font-bold text-primary w-[50%] overflow-auto">
+      <div
+        class="absolute top-0 left-0 flex flex-col font-bold text-primary overflow-auto shadow-lg"
+      >
+        <button
+          (click)="showMonthBox()"
+          class="flex justify-between items-center z-10 w-52 border bg-primary text-white border-primary py-1 rounded"
+        >
+          <span></span>
+          <span class="-mr-4">
+            {{ selectedMonth.toLocaleUpperCase() }}
+          </span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1.1em"
+            height="1.1em"
+            viewBox="0 0 24 24"
+            class="mr-2"
+          >
+            <path
+              fill="currentColor"
+              d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569z"
+            />
+          </svg>
+        </button>
         @for (item of monthKeys; track $index) {
 
         <button
           (click)="changeMonth(item)"
-          class="border border-primary px-4 py-1 rounded"
-          [ngClass]="{
-            '!bg-primary !text-white': this.selectedMonth === item
-          }"
+          class="bg-[#fffcf3] z-10 w-52 border border-primary border-opacity-20 px-12 py-1 hover:bg-[#f7f4ec]"
+          *ngIf="monthBox"
         >
           {{ item.toLocaleUpperCase() }}
         </button>

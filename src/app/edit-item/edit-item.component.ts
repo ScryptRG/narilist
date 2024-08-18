@@ -39,6 +39,7 @@ export class EditItemComponent {
   newPayment = "";
   newDate = "";
   newMonth!: keyof MonthInterface;
+  monthKeys!: (keyof MonthInterface)[];
   @Input() items!: MonthInterface;
   @Input() itemId!: number;
   @Input() selectedMonth!: keyof MonthInterface;
@@ -47,6 +48,7 @@ export class EditItemComponent {
   selectedItem!: ItemsInterface;
 
   ngOnInit() {
+    this.monthKeys = Object.keys(this.items) as (keyof MonthInterface)[];
     this.selectedItem =
       this.items[this.selectedMonth][
         this.items[this.selectedMonth].findIndex((e) => e.id === this.itemId)
@@ -54,47 +56,6 @@ export class EditItemComponent {
     this.newPrice = this.selectedItem.price;
     this.newPayment = this.selectedItem.payment;
     this.newDate = dayjs(this.selectedItem.dateId).format("YYYY-MM-DDTHH:mm");
-  }
-
-  getMonth(date: Date) {
-    switch (dayjs(date).get("month")) {
-      case 0:
-        this.newMonth = "janeiro";
-        break;
-      case 1:
-        this.newMonth = "fevereiro";
-        break;
-      case 2:
-        this.newMonth = "marco";
-        break;
-      case 3:
-        this.newMonth = "abril";
-        break;
-      case 4:
-        this.newMonth = "maio";
-        break;
-      case 5:
-        this.newMonth = "junho";
-        break;
-      case 6:
-        this.newMonth = "julho";
-        break;
-      case 7:
-        this.newMonth = "agosto";
-        break;
-      case 8:
-        this.newMonth = "setembro";
-        break;
-      case 9:
-        this.newMonth = "outubro";
-        break;
-      case 10:
-        this.newMonth = "novembro";
-        break;
-      default:
-        this.newMonth = "dezembro";
-        break;
-    }
   }
 
   close() {
@@ -106,7 +67,9 @@ export class EditItemComponent {
   }
 
   changeItemMonth() {
-    this.getMonth(new Date(this.newDate));
+    // this.getMonth(new Date(this.newDate));
+    console.log(this.monthKeys);
+    this.newMonth = this.monthKeys[dayjs(this.newDate).get("month")];
     this.items[this.newMonth].push({
       id: this.itemId,
       dateId: dayjs(this.newDate).valueOf(),
@@ -131,8 +94,8 @@ export class EditItemComponent {
     } else {
       this.changeItemMonth();
     }
-    this.setMonthSelling.emit();
     localStorage.setItem("data", JSON.stringify(this.items));
+    this.setMonthSelling.emit();
     this.close();
   }
 
