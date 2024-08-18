@@ -14,8 +14,18 @@ interface ItemsInterface {
 }
 
 interface MonthInterface {
+  janeiro: ItemsInterface[];
+  fevereiro: ItemsInterface[];
+  marco: ItemsInterface[];
+  abril: ItemsInterface[];
+  maio: ItemsInterface[];
+  junho: ItemsInterface[];
   julho: ItemsInterface[];
   agosto: ItemsInterface[];
+  setembro: ItemsInterface[];
+  outubro: ItemsInterface[];
+  novembro: ItemsInterface[];
+  dezembro: ItemsInterface[];
 }
 @Component({
   selector: "app-root",
@@ -34,9 +44,21 @@ export class AppComponent {
   monthSelling: number = 0;
 
   items: MonthInterface = {
+    janeiro: [],
+    fevereiro: [],
+    marco: [],
+    abril: [],
+    maio: [],
+    junho: [],
     julho: [],
     agosto: [],
+    setembro: [],
+    outubro: [],
+    novembro: [],
+    dezembro: [],
   };
+
+  monthKeys: any = Object.keys(this.items);
 
   setMonthSelling(month: keyof MonthInterface) {
     this.monthSelling = this.items[month].reduce((acc, cur) => {
@@ -49,12 +71,54 @@ export class AppComponent {
     this.setMonthSelling(this.selectedMonth);
   }
 
-  addItem(form: NgForm) {
+  getMonth(date: Date) {
+    switch (dayjs(date).get("month")) {
+      case 0:
+        this.selectedMonth = "janeiro";
+        break;
+      case 1:
+        this.selectedMonth = "fevereiro";
+        break;
+      case 2:
+        this.selectedMonth = "marco";
+        break;
+      case 3:
+        this.selectedMonth = "abril";
+        break;
+      case 4:
+        this.selectedMonth = "maio";
+        break;
+      case 5:
+        this.selectedMonth = "junho";
+        break;
+      case 6:
+        this.selectedMonth = "julho";
+        break;
+      case 7:
+        this.selectedMonth = "agosto";
+        break;
+      case 8:
+        this.selectedMonth = "setembro";
+        break;
+      case 9:
+        this.selectedMonth = "outubro";
+        break;
+      case 10:
+        this.selectedMonth = "novembro";
+        break;
+      default:
+        this.selectedMonth = "dezembro";
+        break;
+    }
+  }
+
+  addItem() {
     if (
       this.paymentMethod != "" &&
       this.priceValue != 0 &&
       this.priceValue != null
     ) {
+      this.getMonth(new Date());
       this.items[this.selectedMonth].push({
         id: dayjs().valueOf(),
         dateId: dayjs().valueOf(),

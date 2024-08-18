@@ -13,25 +13,19 @@
     <div
       class="flex justify-between items-center w-full gap-y-2 max-[450px]:flex-col max-[450px]:justify-center"
     >
-      <div class="flex gap-2 font-bold text-primary">
+      <div class="flex gap-2 font-bold text-primary w-[50%] overflow-auto">
+        @for (item of monthKeys; track $index) {
+
         <button
-          (click)="changeMonth('julho')"
+          (click)="changeMonth(item)"
           class="border border-primary px-4 py-1 rounded"
           [ngClass]="{
-            '!bg-primary !text-white': this.selectedMonth === 'julho'
+            '!bg-primary !text-white': this.selectedMonth === item
           }"
         >
-          JULHO
+          {{ item.toLocaleUpperCase() }}
         </button>
-        <button
-          (click)="changeMonth('agosto')"
-          class="border border-primary px-4 py-1 rounded"
-          [ngClass]="{
-            '!bg-primary !text-white': this.selectedMonth === 'agosto'
-          }"
-        >
-          AGOSTO
-        </button>
+        }
       </div>
       <span class="text-primary font-normal self-center">
         Venda total no mês: R$ {{ monthSelling }}
@@ -60,11 +54,7 @@
       }
     </div>
     <div class="flex items-center">
-      <form
-        #valueForm="ngForm"
-        (ngSubmit)="addItem(valueForm)"
-        class="flex flex-row-reverse items-center"
-      >
+      <form (ngSubmit)="addItem()" class="flex flex-row-reverse items-center">
         <div>
           <span class="!text-primary mr-2">R$</span>
           <input
