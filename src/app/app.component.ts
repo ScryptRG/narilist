@@ -41,7 +41,7 @@ export class AppComponent {
   cardType: string = "Débito";
   showEdit: boolean = false;
   itemId: number = 1;
-  monthSelling: number = 0;
+  monthSelling: any = 0;
   monthBox: boolean = false;
 
   items: MonthInterface = {
@@ -130,5 +130,14 @@ export class AppComponent {
 
   showMonthBox() {
     this.monthBox = !this.monthBox;
+  }
+
+  formatValue(value: number) {
+    const formattedValue = new Intl.NumberFormat("pt-br", {
+      style: "currency",
+      currency: "BRL",
+    }).format(value);
+
+    return formattedValue;
   }
 }

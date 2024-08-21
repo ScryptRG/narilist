@@ -49,7 +49,7 @@
         }
       </div>
       <span class="text-primary font-normal self-center">
-        Venda total no mês: R$ {{ monthSelling }}
+        Venda total no mês: {{ formatValue(monthSelling) }}
       </span>
     </div>
     <div
@@ -64,7 +64,7 @@
           {{ item.date }}
         </p>
         <p class="text-center flex-1 animate__bounceIn">
-          R$ {{ item.price }},00
+          {{ formatValue(item.price) }}
         </p>
         <p class="text-center flex-1 animate__bounceIn">{{ item.payment }}</p>
       </div>
