@@ -2,13 +2,15 @@
   class="fixed inset-0 flex justify-center items-center w-full min-h-screen bg-black bg-opacity-30 z-50"
   (click)="close()"
 >
-  <div
-    class="relative flex flex-wrap justify-center gap-x-5 gap-y-6 items-center animate__animated animate__zoomIn border border-primary bg-secondary px-5 py-5 rounded-lg mx-5"
-    (click)="SP($event)"
+  <form
+    class="relative flex flex-wrap justify-center gap-x-5 gap-y-6 items-center animate__animated animate__zoomIn animate__faster border border-primary bg-secondary px-5 py-5 rounded-lg mx-5"
+    (click)="stopPropagation($event)"
+    (ngSubmit)="updateItem()"
   >
     <input
       type="datetime-local"
       [(ngModel)]="newDate"
+      name="date"
       class="bg-primary text-white p-2 rounded"
     />
     <div>
@@ -17,6 +19,7 @@
         type="number"
         [value]="newPrice"
         [(ngModel)]="newPrice"
+        name="price"
         class="p-1.5 border border-primary text-primary bg-transparent max-w-16 rounded placeholder:text-[#6A512C60]"
         autofocus
         placeholder="Preço"
@@ -25,6 +28,7 @@
     <select
       class="bg-primary text-white payment-select p-2 cursor-pointer rounded"
       [(ngModel)]="newPayment"
+      name="payment"
     >
       <option value="Pix">Pix</option>
       <option value="Dinheiro">Dinheiro</option>
@@ -33,19 +37,21 @@
     </select>
     <div>
       <button
+        type="submit"
         class="py-1 px-3 border border-primary bg-primary text-white rounded-l"
         (click)="updateItem()"
       >
         Salvar
       </button>
       <button
+        type="button"
         class="py-1 px-3 border border-primary bg-secondary text-primary rounded-r"
         (click)="close()"
       >
         Cancelar
       </button>
     </div>
-    <button (click)="deleteItem()">
+    <button (click)="deleteItem()" type="button">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="1.4em"
@@ -58,5 +64,5 @@
         />
       </svg>
     </button>
-  </div>
+  </form>
 </section>

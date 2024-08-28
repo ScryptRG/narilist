@@ -62,7 +62,7 @@ export class EditItemComponent {
     this.showEditCard.emit(false);
   }
 
-  SP(e: Event) {
+  stopPropagation(e: Event) {
     e.stopPropagation();
   }
 
@@ -73,7 +73,7 @@ export class EditItemComponent {
     this.items[this.newMonth].push({
       id: this.itemId,
       dateId: dayjs(this.newDate).valueOf(),
-      date: dayjs(this.newDate).format("DD/MM/YYYY - HH:mm"),
+      date: dayjs(this.newDate).format("DD/MM/YYYY"),
       price: this.newPrice,
       payment: this.newPayment,
     });
@@ -89,7 +89,7 @@ export class EditItemComponent {
     ) {
       this.selectedItem.price = this.newPrice;
       this.selectedItem.payment = this.newPayment;
-      this.selectedItem.date = dayjs(this.newDate).format("DD/MM/YYYY - HH:mm");
+      this.selectedItem.date = dayjs(this.newDate).format("DD/MM/YYYY");
       this.selectedItem.dateId = dayjs(this.newDate).valueOf();
     } else {
       this.changeItemMonth();

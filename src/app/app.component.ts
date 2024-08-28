@@ -89,7 +89,7 @@ export class AppComponent {
       this.items[this.selectedMonth].push({
         id: dayjs().valueOf(),
         dateId: dayjs().valueOf(),
-        date: dayjs().format("DD/MM/YYYY - HH:mm"),
+        date: dayjs().format("DD/MM/YYYY"),
         price: this.priceValue,
         payment:
           this.paymentMethod === "" || this.paymentMethod === "card"
@@ -119,7 +119,7 @@ export class AppComponent {
   }
 
   formatDate(date: Date) {
-    dayjs(date).format("DD/MM/YYYY - HH:mm");
+    dayjs(date).format("DD/MM/YYYY");
   }
 
   changeMonth(month: keyof MonthInterface) {
